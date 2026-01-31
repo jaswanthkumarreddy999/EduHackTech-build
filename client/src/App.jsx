@@ -32,6 +32,8 @@ import CourseEditor from "./modules/admin/pages/CourseEditor";
 import ManageUsers from "./modules/admin/pages/ManageUsers";
 import ManageChallenges from "./modules/admin/pages/ManageChallenges";
 import CreateChallenge from "./modules/competition/pages/CreateChallenge";
+import TeamFinder from "./modules/competition/pages/TeamFinder";
+import Hackmates from "./modules/competition/pages/Hackmates";
 import AdminSettings from "./modules/admin/pages/AdminSettings";
 import RobotPetDog from "./components/RobotPetDog/RobotPetDog";
 
@@ -120,6 +122,30 @@ function App() {
                   element={
                     <ProtectedRoute>
                       <CreateChallenge />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/team-finder"
+                  element={
+                    <ProtectedRoute>
+                      <TeamFinder />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/hackmates"
+                  element={
+                    <ProtectedRoute>
+                      <Hackmates />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/competition/:id/team-finder"
+                  element={
+                    <ProtectedRoute>
+                      <TeamFinder />
                     </ProtectedRoute>
                   }
                 />

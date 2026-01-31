@@ -21,6 +21,8 @@ import {
   Loader2,
   AlertTriangle,
   Terminal,
+  Users,
+  UserPlus2,
 } from "lucide-react";
 import CompilerModal from "../Compiler/CompilerModal";
 import { useTheme } from "../../context/ThemeContext";
@@ -32,6 +34,7 @@ import {
   deleteNotification,
   formatRelativeTime,
 } from "../../services/notification.service";
+import { getUnreadCount as getChatUnreadCount } from "../../services/chat.service";
 import "./Navbar.css";
 import logo from "../assets/EduhackTech.jpeg";
 
@@ -54,6 +57,7 @@ const Navbar = () => {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [chatUnreadCount, setChatUnreadCount] = useState(0);
   const [notifLoading, setNotifLoading] = useState(false);
   const notificationRef = useRef(null);
 
@@ -125,6 +129,30 @@ const Navbar = () => {
       fetchNotifications();
     }
   }, [user, token]);
+
+  // Fetch chat unread count on mount
+  const fetchChatUnread = async () => {
+    if (!token) return;
+    try {
+      const res = await getChatUnreadCount(token);
+      setChatUnreadCount(res?.count || 0);
+    } catch {
+      setChatUnreadCount(0);
+    }
+  };
+
+  useEffect(() => {
+    if (user && token) {
+      fetchChatUnread();
+    }
+  }, [user, token]);
+
+  // Refetch chat unread when profile dropdown opens
+  useEffect(() => {
+    if (isProfileOpen && token) {
+      fetchChatUnread();
+    }
+  }, [isProfileOpen, token]);
 
   const handleLogout = () => {
     logoutUser();
@@ -529,6 +557,24 @@ const Navbar = () => {
                           className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-gray-50 hover:text-blue-600 transition-colors"
                         >
                           <Trophy size={16} /> My Registrations
+                        </Link>
+                        <Link
+                          to="/hackmates"
+                          className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-gray-50 hover:text-blue-600 transition-colors"
+                        >
+                          <UserPlus2 size={16} /> Hackmates
+                        </Link>
+                        <Link
+                          to="/team-finder"
+                          onClick={() => { fetchChatUnread(); }}
+                          className="relative flex items-center gap-3 px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-gray-50 hover:text-blue-600 transition-colors"
+                        >
+                          <Users size={16} /> Find Teammates
+                          {chatUnreadCount > 0 && (
+                            <span className="absolute right-3 min-w-[18px] h-[18px] flex items-center justify-center text-[10px] font-bold text-white bg-red-500 rounded-full border-2 border-white">
+                              {chatUnreadCount > 9 ? "9+" : chatUnreadCount}
+                            </span>
+                          )}
                         </Link>
                         <Link
                           to="/profile"
