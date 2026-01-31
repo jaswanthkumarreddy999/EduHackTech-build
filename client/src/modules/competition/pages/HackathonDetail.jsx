@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { Calendar, MapPin, Users, Trophy, Flag, Clock, ArrowLeft, Share2, CheckCircle, Edit, X, AlertCircle, CreditCard, FileText } from 'lucide-react';
+import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
+import { Calendar, MapPin, Users, Trophy, Flag, Clock, ArrowLeft, Share2, CheckCircle, Edit, X, AlertCircle, CreditCard, FileText, UserPlus } from 'lucide-react';
 import { getEvent, registerForEvent, updateEvent, checkUserRegistration } from '../../../services/event.service';
 import { useAuth } from '../../../context/AuthContext';
 import TeamRegistrationModal from '../../../components/competition/TeamRegistrationModal';
@@ -224,6 +224,17 @@ const HackathonDetail = () => {
                                 </span>
                             </div>
                         </div>
+
+                        {/* Find Teammates CTA */}
+                        {user && (
+                            <Link
+                                to={`/competition/${id}/team-finder`}
+                                className="mb-6 flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-indigo-600/30 hover:bg-indigo-600/50 border border-indigo-500/40 text-indigo-300 hover:text-indigo-200 transition"
+                            >
+                                <UserPlus size={18} />
+                                <span className="font-medium text-sm">Find Teammates for this Hackathon</span>
+                            </Link>
+                        )}
 
                         {/* Success Message */}
                         {successMessage && (

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, MapPin, Calendar, Trophy, Users, ArrowRight, Tag, Filter, Plus } from 'lucide-react';
+import { Search, MapPin, Calendar, Trophy, Users, ArrowRight, Tag, Filter, Plus, UserPlus } from 'lucide-react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { getEvents } from '../../../services/event.service';
 import { useAuth } from '../../../context/AuthContext';
@@ -152,12 +152,20 @@ const HackathonList = () => {
                         </div>
 
                         {user && (
-                            <button
-                                onClick={() => navigate('/competition/organize')}
-                                className="px-4 py-2 rounded-full bg-green-600 text-white font-semibold hover:bg-green-700 transition flex items-center gap-2 whitespace-nowrap"
-                            >
-                                <Plus size={18} /> Organize
-                            </button>
+                            <>
+                                <Link
+                                    to="/team-finder"
+                                    className="px-4 py-2 rounded-full bg-indigo-600/80 text-white font-semibold hover:bg-indigo-600 transition flex items-center gap-2 whitespace-nowrap border border-indigo-500/30"
+                                >
+                                    <UserPlus size={18} /> Find Teammates
+                                </Link>
+                                <button
+                                    onClick={() => navigate('/competition/organize')}
+                                    className="px-4 py-2 rounded-full bg-green-600 text-white font-semibold hover:bg-green-700 transition flex items-center gap-2 whitespace-nowrap"
+                                >
+                                    <Plus size={18} /> Organize
+                                </button>
+                            </>
                         )}
                     </div>
                 </div>

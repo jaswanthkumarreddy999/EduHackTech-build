@@ -68,6 +68,12 @@ export const put = (endpoint, body, token = null) =>
     apiRequest(endpoint, { method: 'PUT', body: JSON.stringify(body) }, token);
 
 /**
+ * PATCH request helper
+ */
+export const patch = (endpoint, body, token = null) =>
+    apiRequest(endpoint, { method: 'PATCH', body: JSON.stringify(body) }, token);
+
+/**
  * DELETE request helper
  */
 export const del = (endpoint, token = null) =>
