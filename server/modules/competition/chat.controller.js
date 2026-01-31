@@ -1,6 +1,7 @@
 const Conversation = require('./conversation.model');
 const Message = require('./message.model');
 const ConnectRequest = require('./connectRequest.model');
+const mongoose = require('mongoose');
 
 // Helper: mark all messages in conversation as read (for recipient)
 const markConversationAsRead = async (conversationId, userId) => {
@@ -12,14 +13,18 @@ const markConversationAsRead = async (conversationId, userId) => {
 
 // Helper: get or create conversation between two users (must be connected)
 const getOrCreateConv = async (userId, otherUserId) => {
-    const participants = [userId, otherUserId].sort();
+    // Convert to ObjectId for consistent comparison
+    const userObjId = new mongoose.Types.ObjectId(userId);
+    const otherObjId = new mongoose.Types.ObjectId(otherUserId);
+
+    const participants = [userObjId, otherObjId].sort((a, b) => a.toString().localeCompare(b.toString()));
     let conv = await Conversation.findOne({ participants });
     if (conv) return conv;
 
     const connectRequest = await ConnectRequest.findOne({
         $or: [
-            { from: userId, to: otherUserId, status: 'accepted' },
-            { from: otherUserId, to: userId, status: 'accepted' }
+            { from: userObjId, to: otherObjId, status: 'accepted' },
+            { from: otherObjId, to: userObjId, status: 'accepted' }
         ]
     });
 
